@@ -6,7 +6,7 @@ import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import Notification from './components/UI/Notification';
 
-import { uiActions } from './store/uiSlice';
+import { sendCartData } from './store/cartSlice';
 
 let isInitial = true;
 
@@ -21,34 +21,8 @@ const App = () => {
       isInitial = false;
       return;
     }
-    
-    dispatch(uiActions.showNotification({
-      status: 'pending',
-      title: 'Sending...',
-      message: 'Sending cart data!'
-    }))
 
-    fetch('https://react-http-32f77-default-rtdb.asia-southeast1.firebasedatabase.app/cart.json', {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(cart)
-    }).then(response => {
-        dispatch(uiActions.showNotification({
-        status: 'success',
-        title: 'Success!',
-        message: 'Sent cart data successfully!'
-      }))
-    })
-    .catch(err => {
-      console.log(err.message);
-      dispatch(uiActions.showNotification({
-        status: 'error',
-        title: 'Error!',
-        message: 'Sending cart data failed!'
-      }))
-    })
+    dispatch(sendCartData(cart))
   }, [cart, dispatch])
 
   return (
